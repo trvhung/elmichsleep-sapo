@@ -1,0 +1,89 @@
+<div class="layout-collection">
+	{% include 'breadcrumb' %}
+	<div class="container">
+		<div class="row">
+			<aside class="dqdt-sidebar sidebar col-lg-3 col-12">
+				<div class="section-box-bg">
+					{%- include 'sidebar-collection' -%}
+				</div>
+			</aside> 
+			<div class="block-collection col-lg-9 col-12">
+				<div class="section-box-bg">
+					<h1 class="title-page d-md-block d-none">{%if collection.name == 'All'%}Tất cả sản phẩm{%else%}{{ collection.name }}{%endif%}</h1>
+					<div class="category-products products-view products-view-grid list_hover_pro">
+						{% if collection.products.size > 0 %}
+						{%include 'collection-sortby'%}
+						{%endif%}
+						{%if page_title =="Tất cả sản phẩm"%}
+						<div class="descrip_coll {% if pages[settings.des_all_page].content.size > 700  %}content_coll{% endif %} add_apper">
+							{{ pages[settings.des_all_page].content }}
+							{% if pages[settings.des_all_page].content.size > 700  %}
+							<div class="bg_cl"></div>
+							{% endif %}
+						</div>
+						{% if pages[settings.des_all_page].content.size > 700  %}
+						<div class="view_mores">
+							<a class="one">Xem thêm <img width="90" height="90" src="{{'sortdown.png' | asset_url}}" alt="{{store.name}}"></a>
+							<a class="two active">Thu gọn <img width="90" height="90" src="{{'sortdown.png' | asset_url}}" alt="{{store.name}}"></a>
+						</div>
+						{% endif %}
+						{%else%}
+						{%if collection.description.size > 0%}
+						{% assign mycontent = collection.description | split:'<h5>' %}
+						<div class="descrip_coll {% if mycontent[0].size > 700  %}content_coll{% endif %} add_apper">
+							{{mycontent[0]}}
+							{% if mycontent[0].size > 700  %}
+							<div class="bg_cl"></div>
+							{% endif %}
+						</div>
+						{% if mycontent[0] != ''  %}
+						{% if mycontent[0].size > 700  %}
+						<div class="view_mores">
+							<a class="one">Xem thêm <img width="90" height="90" src="{{'sortdown.png' | asset_url}}" alt="{{store.name}}"></a>
+							<a class="two active">Thu gọn <img width="90" height="90" src="{{'sortdown.png' | asset_url}}" alt="{{store.name}}"></a>
+						</div>
+						{% endif %}
+						{% endif %}
+						{% endif %}
+						{% endif %}
+						{% paginate collection.products by settings.collection_number_product %}
+						{% if collection.products.size > 0 %}
+						{%include 'products-grid-item'%}
+						{% else %}
+						<div class="alert alert-warning alert-dismissible margin-top-15 section" role="alert">
+							Sản phẩm đang được cập nhật.
+						</div>
+						{% endif %}
+						{% endpaginate %}
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div id="open-filters" class="open-filters d-lg-none d-xl-none">
+			<span>Lọc</span>
+		</div>
+	</div>
+</div>
+<div class="opacity_sidebar"></div>
+<script>
+	$('.view_mores a.one').click(function() {
+		$(this).addClass('active');
+		$('.view_mores a.two').removeClass('active');
+		$('.content_coll').addClass('active');
+		$('.bg_cl').addClass('active');
+	});
+	$('.view_mores a.two').click(function() {
+		$(this).addClass('active');
+		$('.view_mores a.one').removeClass('active');
+		$('.content_coll').removeClass('active');
+		$('.bg_cl').removeClass('active');
+	});
+	var colName = "{%if page_title == 'All'%}Tất cả sản phẩm{%else%}{{ page_title }}{%endif%}";
+	{% if collection.id > 0 %}
+	var colId = {{collection.id}};
+	{%else%}
+	var colId = 0;
+	{%endif%}
+	var selectedViewData = "{% if template contains '.list' %}data_list{% else %}data{% endif %}";
+</script>
