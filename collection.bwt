@@ -11,9 +11,47 @@
 				<div class="section-box-bg">
 					<h1 class="title-page d-md-block d-none">{%if collection.name == 'All'%}Tất cả sản phẩm{%else%}{{ collection.name }}{%endif%}</h1>
 					<div class="category-products products-view products-view-grid list_hover_pro">
-						{% if collection.products.size > 0 %}
 						{%include 'collection-sortby'%}
+						{%- if collection.products.size > 0 -%}
 						{%endif%}
+
+						{% paginate collection.products by settings.collection_number_product %}
+						{%- if collection.products.size > 0 -%}
+						<div class="products-view products-view-grid list_hover_pro">
+							<div class="row row-fix">
+								{%- for product in collection.products -%}
+								{% assign is_color = false %}
+
+								{% for option in product.options %}
+								{% assign downcased_option = option | downcase %}
+								{% if downcased_option contains 'Màu' or downcased_option contains 'màu'  or downcased_option contains 'color' %}
+								{% assign is_color = true %}
+								{% endif %}
+								{% endfor %}
+								{% if is_color%}
+								{% for variant in product.variants %}
+								<div class="col-6 col-md-6 col-xl-4 col-fix">
+									<div class="item_product_main">
+										{%- include 'product_grid_office_no' with option -%} 
+									</div>
+								</div>	
+								{% endfor %}
+								{%else%}
+								<div class="col-6 col-md-6 col-xl-4 col-fix">
+									<div class="item_product_main">
+										{%- include 'product_grid_office' -%} 
+									</div>
+								</div>	
+								{%endif%}
+								{%- endfor -%}
+							</div>
+						</div>
+						{% else %}
+						<div class="alert alert-warning alert-dismissible margin-top-15 section" role="alert">
+							Sản phẩm đang được cập nhật.
+						</div>
+						{% endif %}
+						{% endpaginate %}
 						{%if page_title =="Tất cả sản phẩm"%}
 						<div class="descrip_coll {% if pages[settings.des_all_page].content.size > 700  %}content_coll{% endif %} add_apper">
 							{{ pages[settings.des_all_page].content }}
@@ -46,15 +84,6 @@
 						{% endif %}
 						{% endif %}
 						{% endif %}
-						{% paginate collection.products by settings.collection_number_product %}
-						{% if collection.products.size > 0 %}
-						{%include 'products-grid-item'%}
-						{% else %}
-						<div class="alert alert-warning alert-dismissible margin-top-15 section" role="alert">
-							Sản phẩm đang được cập nhật.
-						</div>
-						{% endif %}
-						{% endpaginate %}
 					</div>
 				</div>
 
