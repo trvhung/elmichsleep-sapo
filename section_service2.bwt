@@ -1,0 +1,36 @@
+<section class="section_service2">
+	<div class="container">
+		<h2 class="title-module"><span>{{settings.section_service_title2}}</span></h2>
+	</div>
+	<div class="service">
+		<div class="container">
+			<div class="row">
+				{%for i in (1..6)%}
+				{%capture icon%}icon_2ser{{i}}.png{%endcapture%}
+				{%capture ena%}ena_2ser{{i}}{%endcapture%}
+				{%capture title%}title_2ser{{i}}{%endcapture%}
+				{%capture des%}des_2ser{{i}}{%endcapture%}
+				{%capture url%}url_2ser{{i}}{%endcapture%}
+				{%if settings[ena]%}
+				<div class="col-md-3 col-12">
+					<a class="item" href="{{settings[url]}}" title="{{settings[title]}}">
+						<span class="ico"><img src="{{icon | asset_url }}" alt="{{settings[title]}}"></span>
+						{%if settings[title] != null and settings[title] != ''%}
+						<h3>
+							{{settings[title]}}
+						</h3>
+						{%endif%}
+						{%if settings[des] != null and settings[des] != ''%}
+						<p>
+							{{settings[des]}}
+						</p>
+						{%endif%}
+					</a>
+				</div>
+				
+				{%endif%}
+				{%endfor%}
+			</div>
+		</div>
+	</div>
+</section>
